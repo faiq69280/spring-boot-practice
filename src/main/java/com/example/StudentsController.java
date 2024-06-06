@@ -1,5 +1,6 @@
 package com.example;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,10 +9,17 @@ import java.util.List;
 @RequestMapping("student")
 public class StudentsController {
 
+
+    StudentsService studentsService;
+
+    public StudentsController(StudentsService studentsService){
+        this.studentsService = studentsService;
+    }
+
     @PostMapping("/update")
     public String getStudent(@RequestBody Object request) {
         if(request instanceof  String) {
-            return "Request type string hit : %s ".formatted((String)request);
+            return "Request type string hit : %s ".formatted(studentsService.getStudent());
         }
         else if(request instanceof List){
             List<Object> lst = (List<Object>)request;
