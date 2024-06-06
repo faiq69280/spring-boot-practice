@@ -19,7 +19,7 @@ public class StudentsController {
     @PostMapping("/update")
     public String getStudent(@RequestBody Object request) {
         if(request instanceof  String) {
-            return "Request type string hit : %s ".formatted(studentsService.getStudent());
+            return "Request type string hit : %s ".formatted("Some random msg");
         }
         else if(request instanceof List){
             List<Object> lst = (List<Object>)request;
