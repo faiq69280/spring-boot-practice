@@ -18,12 +18,12 @@ public class StudentsController {
 
             for(Object obj : lst)
                 if(!(obj instanceof String))
-                    return "Bad request";
+                    return "400 bad request";
 
             return ((List<String>)request).toString();
         }
 
-        return "Bad Request";
+        return "400 bad Request";
     }
 
 
