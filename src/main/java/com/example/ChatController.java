@@ -4,11 +4,11 @@ package com.example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/chat")
+import java.util.List;
+@RequestMapping("/chat")
+@RestController
 public class ChatController {
 
      @Autowired
@@ -19,4 +19,10 @@ public class ChatController {
           return new ResponseEntity<>(chatMessageService.save(chatMessage)
                   ,HttpStatusCode.valueOf(200));
     }
+
+    @GetMapping("/{with}")
+    public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable String with){
+         return new ResponseEntity<>(chatMessageService.findAll("jill",with),HttpStatusCode.valueOf(200));
+    }
+
 }
