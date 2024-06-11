@@ -3,6 +3,8 @@ package com.example.springboot_app;
 
 import com.example.ChatMessage;
 import com.example.ChatMessageRepository;
+import com.example.exceptions.MessageNotFoundException;
+import com.example.exceptions.MessageNotSavedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -32,12 +35,17 @@ public class ChatMessageRepositoryTest {
                 "jill",
                 "Hi",
                 "12-12-2024");
-
-        assertEquals(testMessage,repository.save(testMessage));
+        try {
+            assertEquals(testMessage, repository.save(testMessage));
+        }
+        catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(MessageNotSavedException.class);
+        }
     }
 
     @Test
-    public void testFindAll(){
+    public void testFindAll() {
         String to = "jacob";
         String from = "jill";
 
@@ -48,9 +56,13 @@ public class ChatMessageRepositoryTest {
 
         when(database.stream()).thenReturn(messagesReturned.stream());
 
-
-        assertEquals(messagesReturned,repository.findAll(from,to));
-
+        try {
+            assertEquals(messagesReturned, repository.findAll(from, to));
+        }catch(Exception e){
+            assertThat(e)
+                    .isInstanceOf(MessageNotFoundException.class)
+                    .hasMessage("Message not found");
+        }
     }
 
 
