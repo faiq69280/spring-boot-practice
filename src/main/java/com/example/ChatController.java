@@ -25,25 +25,17 @@ public class ChatController {
 
      @PostMapping("/message")
     public ResponseEntity<ChatMessage> addMessage(@RequestBody ChatMessage chatMessage){
-         try {
+
              return new ResponseEntity<>(chatMessageService.save(chatMessage)
                      , HttpStatus.OK);
-         }catch(MessageNotSavedException ex){
-             logger.log(Level.INFO,ex.getMessage());
-             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-         }
+
+
     }
 
     @GetMapping("/{with}")
     public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable String with){
-
-         try {
              return new ResponseEntity<>(chatMessageService.findAll("jill", with), HttpStatus.OK);
-         }
-         catch(MessageNotFoundException ex){
-             logger.log(Level.INFO,ex.getMessage());
-             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-         }
+
     }
 
 }

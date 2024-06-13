@@ -17,6 +17,10 @@ public class ChatMessageRepository {
 
 
     public ChatMessage save(ChatMessage chatMessage) throws MessageNotSavedException {
+
+        if(database.contains(chatMessage))
+              throw new MessageNotSavedException("Message already exists", chatMessage);
+
         database.add(chatMessage);
         return chatMessage;
     }
