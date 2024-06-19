@@ -1,10 +1,7 @@
 package com.example;
 
 
-import com.example.exceptions.MessageNotFoundException;
-import com.example.exceptions.MessageNotFoundResponse;
-import com.example.exceptions.MessageNotSavedException;
-import com.example.exceptions.MessageNotSavedResponse;
+import com.example.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +24,15 @@ public class ApplicationExceptionHandler {
         MessageNotSavedResponse errorResponse = new MessageNotSavedResponse(ex.getMetaData(),ex.getMessage());
         return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<UnknownExceptionResponse> handleUnknownException(
+            Exception ex
+    ){
+        UnknownExceptionResponse errorResponse = new UnknownExceptionResponse("Unhandled Exception",ex.getMessage());
+        return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 
 }
