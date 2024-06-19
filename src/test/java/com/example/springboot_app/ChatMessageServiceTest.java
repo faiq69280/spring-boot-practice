@@ -11,12 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+import java.time.Instant;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChatMessageServiceTest {
@@ -33,7 +36,7 @@ public class ChatMessageServiceTest {
         ChatMessage testMessage = new ChatMessage("jacob",
                 "jill",
                 "Hi",
-                "12-12-2024");
+                Timestamp.from(Instant.now()));
 
 
         try {
@@ -53,9 +56,11 @@ public class ChatMessageServiceTest {
         String to = "jacob";
         String from = "jill";
 
+        Timestamp timeStamp =  Timestamp.from(Instant.now());
+
         List<ChatMessage> messagesReturned = Arrays.asList(
-                new ChatMessage("jacob","jill","Hi","12-12-2024"),
-                new ChatMessage("jacob","jill","Hi there","13-12-2024")
+                new ChatMessage("jacob","jill","Hi",timeStamp),
+                new ChatMessage("jacob","jill","Hi there",timeStamp)
         );
         try {
             when(repository.findAll(from, to)).thenReturn(messagesReturned);
