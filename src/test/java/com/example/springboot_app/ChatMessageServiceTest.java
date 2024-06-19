@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -27,6 +28,8 @@ public class ChatMessageServiceTest {
     @Mock
     ChatMessageRepository repository;
 
+
+    @MockBean
     @InjectMocks
     ChatMessageService service;
 
@@ -63,7 +66,7 @@ public class ChatMessageServiceTest {
                 new ChatMessage("jacob","jill","Hi there",timeStamp)
         );
         try {
-            when(repository.findAll(from, to)).thenReturn(messagesReturned);
+            when(repository.findAllBySenderAndReciever(from, to)).thenReturn(messagesReturned);
 
             assertEquals(messagesReturned, service.findAll(from, to));
         }

@@ -1,5 +1,6 @@
 package com.example;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import org.springframework.cglib.core.Local;
@@ -10,10 +11,10 @@ import java.time.LocalDate;
 public class ChatMessage {
 
     @Column(name = "reciever")
-    private String to;
+    private String reciever;
 
     @Column(name = "sender")
-    private String from;
+    private String sender;
 
     @Column(name = "message_body")
     private String messageBody;
@@ -27,26 +28,30 @@ public class ChatMessage {
     private Long id;
 
     public ChatMessage(String to, String from, String messageBody, Timestamp date) {
-        this.to = to;
-        this.from = from;
+        this.reciever = to;
+        this.sender = from;
         this.messageBody = messageBody;
         this.date = date;
     }
 
+    public ChatMessage(){
+
+    }
+
     public String getTo() {
-        return to;
+        return reciever;
     }
 
     public void setTo(String to) {
-        this.to = to;
+        this.reciever = to;
     }
 
     public String getFrom() {
-        return from;
+        return sender;
     }
 
     public void setFrom(String from) {
-        this.from = from;
+        this.sender = from;
     }
 
     public String getMessageBody() {

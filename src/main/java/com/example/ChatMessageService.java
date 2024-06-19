@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.List.of;
 
 @Service
 public class ChatMessageService {
@@ -21,7 +24,12 @@ public class ChatMessageService {
     }
     public List<ChatMessage> findAll(String from, String with) throws MessageNotFoundException
     {
-        return chatMessageRepository.findAll(from, with);
+         List<ChatMessage> messages = chatMessageRepository.findAllBySenderIgnoreCaseAndRecieverIgnoreCase(from,with);
+
+         if(messages.isEmpty())
+             throw new MessageNotFoundException("No message for given recipient found");
+
+         return messages;
     }
 
 }
