@@ -66,7 +66,7 @@ public class ChatMessageServiceTest {
                 new ChatMessage("jacob","jill","Hi there",timeStamp)
         );
         try {
-            when(repository.findAllBySenderAndReciever(from, to)).thenReturn(messagesReturned);
+            when(repository.findAllBySenderIgnoreCaseAndRecieverIgnoreCase(from, to)).thenReturn(messagesReturned);
 
             assertEquals(messagesReturned, service.findAll(from, to));
         }
