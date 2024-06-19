@@ -68,7 +68,7 @@ public class ChatMessageRepositoryTest {
 
 
 
-        assertEquals(messagesReturned, repository.findAllBySenderAndReciever(from, to));
+        assertEquals(messagesReturned, repository.findAllBySenderIgnoreCaseAndRecieverIgnoreCase(from,to));
 
 
     }
