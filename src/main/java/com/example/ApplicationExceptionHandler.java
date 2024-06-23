@@ -7,22 +7,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.lang.reflect.Field;
+
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
 
-    @ExceptionHandler(MessageNotFoundException.class)
-    public ResponseEntity<MessageNotFoundResponse> handleMessageNotFoundException(MessageNotFoundException ex){
-           MessageNotFoundResponse errorResponse = new MessageNotFoundResponse(ex.getMessage());
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ResourceNotFoundResponse> handleResourceNotFoundException(ResourceNotFoundException ex){
+           ResourceNotFoundResponse errorResponse = new ResourceNotFoundResponse(ex.getMessage());
            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MessageNotSavedException.class)
-    public ResponseEntity<MessageNotSavedResponse> handleMessageNotSavedResponse(
-            MessageNotSavedException ex
+    @ExceptionHandler(SaveFailureException.class)
+    public ResponseEntity<SaveFailureResponse> handleMessageNotSavedResponse(
+            SaveFailureException ex
     ){
-        MessageNotSavedResponse errorResponse = new MessageNotSavedResponse(ex.getMetaData(),ex.getMessage());
-        return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+        SaveFailureResponse<?> response = new SaveFailureResponse<>(ex.getMetaData(),ex.getMessage());
+        return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)

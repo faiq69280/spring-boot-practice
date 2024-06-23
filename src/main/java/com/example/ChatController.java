@@ -1,17 +1,16 @@
 package com.example;
 
 
-import com.example.exceptions.MessageNotFoundException;
-import com.example.exceptions.MessageNotSavedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 @RequestMapping("/chat")
 @RestController
@@ -24,18 +23,18 @@ public class ChatController {
     Logger logger;
 
      @PostMapping("/message")
-    public ResponseEntity<ChatMessage> addMessage(@RequestBody ChatMessage chatMessage){
+    public ResponseEntity<ChatMessageResponseModel> addMessage(@RequestBody ChatMessagePayload chatMessageRequest){
 
-             return new ResponseEntity<>(chatMessageService.save(chatMessage)
+
+             return new ResponseEntity<>(chatMessageService.save(chatMessageRequest)
                      , HttpStatus.OK);
 
 
     }
 
-    @GetMapping("/{with}")
-    public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable String with){
-             return new ResponseEntity<>(chatMessageService.findAll("jill", with), HttpStatus.OK);
-
+    @GetMapping
+    public ResponseEntity<List<ChatMessageResponseModel>> getMessages(@RequestParam Map<String,String> queryParams){
+             return new ResponseEntity<>(chatMessageService.findAll(queryParams.get("sender"), queryParams.get("reciever")), HttpStatus.OK);
     }
 
 }

@@ -3,8 +3,6 @@ package com.example.springboot_app;
 import com.example.ChatMessage;
 import com.example.ChatMessageRepository;
 import com.example.ChatMessageService;
-import com.example.exceptions.MessageNotFoundException;
-import com.example.exceptions.MessageNotSavedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
