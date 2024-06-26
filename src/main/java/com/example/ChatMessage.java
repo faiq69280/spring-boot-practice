@@ -7,14 +7,19 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 @Entity
-@Table(name = "chat_messages")
+@Table(name = "chat_messages"/*, uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"reciever","sender"})
+}*/)
 public class ChatMessage {
 
-    @Column(name = "reciever")
-    private String reciever;
+    @ManyToOne
+    @JoinColumn(name = "reciever", referencedColumnName = "id")
+    private User reciever;
 
-    @Column(name = "sender")
-    private String sender;
+
+    @ManyToOne
+    @JoinColumn(name = "sender" , referencedColumnName = "id")
+    private User sender;
 
     @Column(name = "message_body")
     private String messageBody;
@@ -27,7 +32,10 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public ChatMessage(String to, String from, String messageBody, Timestamp date) {
+
+
+
+    public ChatMessage(User to,User from, String messageBody, Timestamp date) {
         this.reciever = to;
         this.sender = from;
         this.messageBody = messageBody;
@@ -38,19 +46,19 @@ public class ChatMessage {
 
     }
 
-    public String getTo() {
+    public User getTo() {
         return reciever;
     }
 
-    public void setTo(String to) {
+    public void setTo(User to) {
         this.reciever = to;
     }
 
-    public String getFrom() {
+    public User getFrom() {
         return sender;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(User from) {
         this.sender = from;
     }
 
@@ -76,5 +84,16 @@ public class ChatMessage {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "reciever:" + reciever.getName() +
+                ", sender:" + sender.getName() +
+                ", messageBody:'" + messageBody + '\'' +
+                ", date:" + date +
+                ", id:" + id +
+                '}';
     }
 }
