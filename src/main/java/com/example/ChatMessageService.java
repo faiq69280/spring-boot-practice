@@ -49,14 +49,11 @@ public class ChatMessageService {
         chatMessage.setDate(Timestamp.from(Instant.now()));
         chatMessage.setMessageBody(messagePayload.message());
 
-        ChatMessage messageSaved =
-                Optional.ofNullable(chatMessageRepository.save(chatMessage))
-                        .orElseGet(
-                                    ()->{
-                                        throw new SaveFailureException("Returned NULL while saving",
-                                            chatMessage);
-                                    }
-                        );
+        ChatMessage messageSaved = Optional.ofNullable(chatMessageRepository.save(chatMessage)).orElseGet(()->{
+                            throw new SaveFailureException(
+                                       "Returned NULL while saving",
+                                        chatMessage);
+                        });
 
         return new ChatMessageResponseModel(messageSaved.getFrom().getName(),
                 messageSaved.getTo().getName(),
