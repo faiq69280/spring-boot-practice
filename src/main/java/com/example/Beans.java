@@ -4,6 +4,7 @@ package com.example;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +24,11 @@ public class Beans {
     public Logger logger(){
         return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }

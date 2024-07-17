@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import org.springframework.cglib.core.Local;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User  {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +46,5 @@ public class User {
 
     public User() {
     }
+
 }
