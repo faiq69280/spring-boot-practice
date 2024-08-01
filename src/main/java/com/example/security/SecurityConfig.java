@@ -18,10 +18,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+
+    @Bean
+    AuthEntryPointJwt authEntryPointJwt(){
+
+        return new AuthEntryPointJwt();
+
+    }
+
+
+    @Bean
+    AuthTokenFilter authTokenFilter(){
+        return new AuthTokenFilter();
+    }
+
 
 
     @Bean
@@ -32,11 +50,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers("/h2/**").permitAll()
                                 .requestMatchers("/user/register").permitAll()
+                                .requestMatchers("/user/login").permitAll()
+                                .requestMatchers("/error/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(authEntryPointJwt()))
+               // .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }

@@ -32,7 +32,10 @@ public class ChatMessageService {
                 },
                 ()-> {
                     throw new SaveFailureException("Couldn't find the sender",
-                        (ChatMessagePayload)messagePayload);
+                            (ChatMessageResponseModel)new ChatMessageResponseModel(messagePayload.sender(),
+                                    messagePayload.reciever(),
+                                    messagePayload.message(),
+                                    Timestamp.from(Instant.now())));
                 }
         );
 
@@ -42,7 +45,10 @@ public class ChatMessageService {
                 },
                 ()->{
                     throw new SaveFailureException("Couldn't find the reciever",
-                            (ChatMessagePayload)messagePayload);
+                            (ChatMessageResponseModel)new ChatMessageResponseModel(messagePayload.sender(),
+                                    messagePayload.reciever(),
+                                    messagePayload.message(),
+                                    Timestamp.from(Instant.now())));
                 }
         );
 

@@ -2,7 +2,10 @@ package com.example;
 
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.exceptions.SaveFailureException;
+import com.example.security.CustomPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +19,8 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    @Qualifier("customPasswordEncoder")
+    CustomPasswordEncoder passwordEncoder;
 
     public User register(User user) throws SaveFailureException{
 
@@ -24,20 +28,25 @@ public class UserService implements UserDetailsService {
             throw new SaveFailureException("Couldn't register user: already exists",
                     (User)user);
 
+        passwordEncoder.generateSalt();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setSalt(passwordEncoder.getSalt());
 
         return userRepository.save(user);
     }
 
-    public User login(User user) throws ResourceNotFoundException
+    public User login(User user) throws AuthenticationCredentialsNotFoundException
     {
+        User fetchedUser = userRepository.findByName(user.getName()).orElseGet(()->{
+            throw new UsernameNotFoundException("Couldn't find username in DB");
+        });
 
-
+        passwordEncoder.setSalt(fetchedUser.getSalt());
         return userRepository.findByNameAndPassword(
                 user.getName(),
-                user.getPassword()
+                passwordEncoder.encode(user.getPassword())
               ).orElseThrow(
-                       () -> new ResourceNotFoundException("User doesn't exist in DB")
+                       () -> new AuthenticationCredentialsNotFoundException("Couldn't find credentials")
                      );
 
     }
